@@ -45,8 +45,8 @@ export default function TabBar({
         sectionXs.push(xSum);
       }
 
-      sectionXsSv.value = sectionXs;
-      widthSv.value = widthRef.current;
+      sectionXsSv.value = [...sectionXs];
+      widthSv.value = [...widthRef.current];
     }
   };
 
@@ -77,9 +77,9 @@ export default function TabBar({
       activeIndex.value = index;
     } else {
       flatListRef.current?.scrollToOffset({
-      offset: sectionXsSv.value[index],
-      animated: true,
-    });
+        offset: sectionXsSv.value[index],
+        animated: true,
+      });
     }
     setActiveTabIndex(index);
   };
@@ -123,7 +123,7 @@ export default function TabBar({
       />
 
       <Animated.View
-        
+
         style={indicatorStyle}
       />
     </View>
