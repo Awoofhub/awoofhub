@@ -37,8 +37,7 @@ export default function ScrollSyncTabBar() {
         ySum += heightRef.current[i] || 0;
         sectionYs.push(ySum);
       }
-
-      sectionYSv.value = sectionYs;
+      sectionYSv.value = [...sectionYs];
     }
   };
 
@@ -59,7 +58,7 @@ export default function ScrollSyncTabBar() {
   const onScrollHandler = useAnimatedScrollHandler({
     onScroll: event => {
       const y = event.contentOffset.y;
-      const triggerPoint = y - 200;
+      const triggerPoint = y - 500;
 
       for (let i = 1; i < sectionYSv.value.length; i++) {
         if (triggerPoint < sectionYSv.value[i]) {

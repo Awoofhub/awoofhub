@@ -3,6 +3,7 @@ import OfferList from '@/components/offers/OfferList';
 import { useOffers } from '@/features/offers/useOffers';
 import { Feather } from '@expo/vector-icons';
 import { Link } from 'expo-router';
+import { memo } from 'react';
 import { LayoutChangeEvent, Pressable, View } from 'react-native';
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
     index: number;
 }
 
-export default function SectionItem({ item, onLayout, index }: Props) {
+function SectionItem({ item, onLayout, index }: Props) {
 
     const { data, isLoading, isFetched, isFetching } = useOffers({
         search: "",
@@ -47,3 +48,7 @@ export default function SectionItem({ item, onLayout, index }: Props) {
         </View>
     );
 }
+
+export default memo(SectionItem, (prevProps, nextProps) => {
+  return prevProps.item.id === nextProps.item.id && prevProps.index === nextProps.index;
+});
