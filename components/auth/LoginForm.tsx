@@ -1,4 +1,5 @@
 import { useLogin } from "@/features/auth/useLogin";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { LoginData } from "@/types/auth";
 import { LoginFormProps } from "@/types/form-props";
@@ -38,6 +39,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   const onSubmit = (data: LoginData) => {
     login.submit(data);
   };
+  const router = useRouter();
 
   return (
     <>
@@ -68,11 +70,11 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
             <View className="flex-1 bg-white rounded-3xl px-5 pb-5 pt-7 gap-6 ">
               <View className="items-center flex-row gap-2">
 
-              <Text className="text-[#0F172A] text-[24px] font-bold mb-2">
+              <Text className="text-[#0F172A] text-4xl font-baloo-bold mb-2">
                 {/* heading and form */}
                 Welcome
               </Text>
-              <Text className="text-[#F15A22] text-[24px] font-bold mb-2">
+              <Text className="text-[#F15A22] text-4xl font-baloo-bold mb-2">
                 Back!
               </Text>
               </View>
@@ -144,13 +146,13 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
                     onPress={() => setRememberMe((prev) => !prev)}
                     color="#f97316"
                   />
-                  <Text className="text-sm text-gray-600 font-montserrat">
+                  <Text className="text-sm text-gray-600 font-mont">
                     Remember me
                   </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity>
-                  <Text className="text-sm text-orange-500 font-semibold font-montserrat">
+                  <Text className="text-sm text-orange-500 font-mont">
                     Forgot Password?
                   </Text>
                 </TouchableOpacity>
@@ -162,7 +164,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
                 activeOpacity={0.85}
                 className="bg-orange-500 h-12 rounded-lg items-center justify-center shadow-sm"
               >
-                <Text className="text-white text-base font-semibold font-baloo">
+                <Text className="text-white text-base font-baloo-medium font-baloo">
                   Login
                 </Text>
               </TouchableOpacity>
@@ -170,7 +172,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
               {/* OR divider */}
               <View className="flex-row items-center my-5 gap-3">
                 <View className="flex-1 h-px bg-gray-200" />
-                <Text className="text-gray-400 text-xs font-montserrat">
+                <Text className="text-gray-400 text-xs font-mont">
                   {" "}
                   OR{" "}
                 </Text>
@@ -187,18 +189,18 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
                   source={require("./../../assets/images/google.png")}
                   className="w-6 h-6"
                 />
-                <Text className="text-sm font-semibold text-gray-700 font-montserrat">
+                <Text className="text-sm text-gray-700 font-mont">
                   Continue with Google
                 </Text>
               </TouchableOpacity>
 
               {/* Sign up link */}
               <View className="flex-row justify-center mt-6">
-                <Text className="text-sm text-gray-500 font-montserrat">
+                <Text className="text-sm text-gray-500 font-mont">
                   Don't have an account?{" "}
                 </Text>
-                <TouchableOpacity>
-                  <Text className="text-sm text-orange-500 font-semibold font-montserrat">
+                <TouchableOpacity onPress={() => router.push("/(auth)/signup")}>
+                  <Text className="text-sm text-orange-500 font-mont-bold">
                     Sign up
                   </Text>
                 </TouchableOpacity>

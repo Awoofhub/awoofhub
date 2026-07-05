@@ -69,7 +69,7 @@ export const InputField = forwardRef<TextInput, InputFieldProps>((props, ref) =>
           }
           numberOfLines={isTextArea ? textAreaRows : 1}
           style={isTextArea ? { textAlignVertical: 'top' } : undefined}
-          className={`flex-1 px-3 text-base text-slate-900 rounded-md font-baloo border
+          className={`flex-1 px-3 text-base text-slate-900 rounded-md font-mont border
             ${isTextArea ? 'h-auto py-3' : ''} 
             ${icon && !isTextArea ? 'pl-11' : ''}
             ${isPassword ? 'pr-11' : ''}
