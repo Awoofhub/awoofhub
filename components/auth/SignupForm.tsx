@@ -1,4 +1,4 @@
-import { LoginFormProps } from "@/types/form-props";
+import { LoginFormProps,SignupFormProps } from "@/types/form-props";
 import { Lock, Mail, User } from "lucide-react-native";
 import { Controller, useForm } from "react-hook-form";
 import { useSignup } from "@/features/auth/useSignup";
@@ -15,18 +15,17 @@ import {
 } from "react-native";
 import { InputField } from "../common/InputField";
 import { useRouter } from "expo-router";
-import { SignupData, SignupFormValues } from "@/types/auth";
+import { SignupData, SignupFormData } from "@/types/auth";
 
-export default function SignupForm({ onSuccess }: LoginFormProps) {
-  // 1. Initialize useForm with your fields
+export default function SignupForm({ onSuccess }: SignupFormProps) {
+  // 1. Initialize useForm with your fieldsY
   const signup = useSignup({ onSuccess });
 
   const {
     control,
     handleSubmit,
     watch,
-    formState: { isSubmitting },
-  } = useForm<SignupFormValues>({
+  } = useForm<SignupFormData>({
     defaultValues: {
       name: "",
       email: "",
@@ -35,9 +34,9 @@ export default function SignupForm({ onSuccess }: LoginFormProps) {
     },
   });
 
-  const onSubmit = async (data: SignupFormValues) => {
-    const { confirmPassword, ...formData } = data;
-    await signup.submit(formData);
+  const onSubmit = async (data: SignupFormData) => {
+    const { confirmPassword, ...signUpData } = data;
+    await signup.submit(signUpData as SignupData);
   };
   const router = useRouter();
 

@@ -1,16 +1,15 @@
 import { User } from "./user";
 
-export interface SignupFormValues {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
 export interface SignupData {
   email: string;
   password: string;
   name: string;
 };
+export interface SignupFormData 
+  extends SignupData {
+  confirmPassword: string;
+  }
+
 export interface EmailData {
   email: string;
 };
