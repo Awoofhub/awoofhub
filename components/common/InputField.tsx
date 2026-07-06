@@ -3,7 +3,7 @@ import React, { forwardRef, useState } from 'react';
 import { Text, TextInput, TextInputProps, TouchableOpacity, View } from 'react-native';
 
 export interface InputFieldProps extends TextInputProps {
-  type?: 'text' | 'email' | 'password' | 'textarea';
+  type?: 'text' | 'email' | 'password' | 'textarea' | 'confirmPassword';
   label?: string;
   textAreaRows?: number;
   error?: { message?: string };
@@ -30,7 +30,7 @@ export const InputField = forwardRef<TextInput, InputFieldProps>((props, ref) =>
   const [showPassword, setShowPassword] = useState(false);
   const [focused, setFocused] = useState(false);
 
-  const isPassword = type === 'password';
+  const isPassword = type === 'password' || type === 'confirmPassword';
   const isEmail = type === 'email';
   const isTextArea = type === 'textarea';
 
@@ -86,9 +86,9 @@ export const InputField = forwardRef<TextInput, InputFieldProps>((props, ref) =>
             onPress={() => setShowPassword(!showPassword)}
           >
             {showPassword ? (
-              <Eye size={20} color="#718096" />
-            ) : (
               <EyeOff size={20} color="#718096" />
+            ) : (
+              <Eye size={20} color="#718096" />
             )}
           </TouchableOpacity>
         )}

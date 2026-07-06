@@ -23,8 +23,6 @@ import { InputField } from "../common/InputField";
 export default function LoginForm({ onSuccess }: LoginFormProps) {
   const login = useLogin({ onSuccess});
   const [rememberMe, setRememberMe] = useState(false);
-  const [errorVisible, setErrorVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const {
     control,
     handleSubmit,

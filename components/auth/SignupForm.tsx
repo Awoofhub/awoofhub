@@ -1,6 +1,7 @@
 import { LoginFormProps } from "@/types/form-props";
-import { FileText, Lock, Mail, User } from "lucide-react-native";
+import { Lock, Mail, User } from "lucide-react-native";
 import { Controller, useForm } from "react-hook-form";
+import { useSignup } from "@/features/auth/useSignup";
 import {
   ScrollView,
   Text,
@@ -10,25 +11,33 @@ import {
   Platform,
   ImageBackground,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { InputField } from "../common/InputField";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { SignupData, SignupFormValues } from "@/types/auth";
 
 export default function SignupForm({ onSuccess }: LoginFormProps) {
   // 1. Initialize useForm with your fields
-  const { control, handleSubmit, watch } = useForm({
+  const signup = useSignup({ onSuccess });
+
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { isSubmitting },
+  } = useForm<SignupFormValues>({
     defaultValues: {
-      fullName: "",
+      name: "",
       email: "",
       password: "",
-      bio: "",
       confirmPassword: "",
     },
   });
 
-  const onSubmit = () => {
-    console.log("Form Data Submitted:");
+  const onSubmit = async (data: SignupFormValues) => {
+    const { confirmPassword, ...formData } = data;
+    await signup.submit(formData);
   };
   const router = useRouter();
 
@@ -60,25 +69,25 @@ export default function SignupForm({ onSuccess }: LoginFormProps) {
         {/* Form */}
         <View className="-mt-10 bg-white rounded-3xl mx-4 p-6">
           <View className="flex-row items-end justify-start mb-6 gap-2">
-          <Text className="text-3xl text-slate-900 font-mont-bold mb-2">
-            Create your
-          </Text>
-          <Text className="text-3xl text-[#F15A22] font-mont-bold mb-2">
-             awoof
-          </Text>
-          <Text className="text-3xl text-slate-900 font-mont-bold mb-2">
-             account
-          </Text>
-          
-            </View>
+            <Text className="text-3xl text-slate-900 font-mont-bold mb-2">
+              Create your
+            </Text>
+            <Text className="text-3xl text-[#F15A22] font-mont-bold mb-2">
+              awoof
+            </Text>
+            <Text className="text-3xl text-slate-900 font-mont-bold mb-2">
+              account
+            </Text>
+          </View>
           <Text className="text-xl text-slate-500 font-mont mb-8">
-            Join the Awoofers community! Spend less, save more, publish deals and reach active audiences 
+            Join the Awoofers community! Spend less, save more, publish deals
+            and reach active audiences
           </Text>
 
           {/* --- FULL NAME FIELD --- */}
           <Controller
             control={control}
-            name="fullName"
+            name="name"
             rules={{ required: "Full name is required" }}
             render={({ field: { onChange, onBlur, value }, fieldState }) => (
               <InputField
@@ -146,7 +155,6 @@ export default function SignupForm({ onSuccess }: LoginFormProps) {
             )}
           />
 
-          {/* --- BIO (TEXTAREA) FIELD --- */}
           {/* --- CONFIRM PASSWORD FIELD --- */}
           <Controller
             control={control}
@@ -159,7 +167,7 @@ export default function SignupForm({ onSuccess }: LoginFormProps) {
             render={({ field: { onChange, onBlur, value }, fieldState }) => (
               <InputField
                 label="Confirm Password"
-                type="password"
+                type="confirmPassword"
                 placeholder="••••••••"
                 compulsory
                 icon={<Lock size={20} color="#F15A22" />}
@@ -174,11 +182,16 @@ export default function SignupForm({ onSuccess }: LoginFormProps) {
           {/* --- SUBMIT BUTTON --- */}
           <TouchableOpacity
             onPress={handleSubmit(onSubmit)}
+            disabled={signup.isPending}
             className="mt-4 bg-orange-500 h-12 gap-3 mb-3 rounded-md items-center justify-center shadow-sm active:opacity-80"
           >
-            <Text className="text-white text-base font-semibold font-mont-bold">
-              Create Account
-            </Text>
+            {signup.isPending ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text className="text-white text-base font-semibold font-mont-bold">
+                Create Account
+              </Text>
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity
