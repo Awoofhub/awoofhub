@@ -14,7 +14,7 @@ type UseSignupOptions = {
 
 export const useSignup = ({ onSuccess }: UseSignupOptions = {}) => {
     
-    const { mutate: submit, isPending } = useMutation({
+    const { mutateAsync: submit, isPending } = useMutation({
         mutationFn: signup,
         onSuccess: (data) => {
             onSuccess?.(data);
