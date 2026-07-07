@@ -9,6 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Image, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { InputField } from "../common/InputField";
+import { useRouter } from 'expo-router';
 
 
 export default function LoginForm({ onSuccess }: LoginFormProps) {
@@ -24,6 +25,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   const onSubmit = (data: LoginData) => {
     login.submit(data);
   };
+  const router = useRouter();
 
   return (
     <SafeAreaView className="flex-1 bg-[#F15A22] px-5">

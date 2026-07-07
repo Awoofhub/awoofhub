@@ -5,6 +5,11 @@ export interface SignupData {
   password: string;
   name: string;
 };
+export interface SignupFormData 
+  extends SignupData {
+  confirmPassword: string;
+  }
+
 export interface EmailData {
   email: string;
 };
