@@ -1,6 +1,7 @@
+import Text from '@/components/common/Text';
 import { Eye, EyeOff } from 'lucide-react-native';
 import React, { forwardRef, useState } from 'react';
-import { Text, TextInput, TextInputProps, TouchableOpacity, View } from 'react-native';
+import { TextInput, TextInputProps, TouchableOpacity, View } from 'react-native';
 
 export interface InputFieldProps extends TextInputProps {
   type?: 'text' | 'email' | 'password' | 'textarea';
@@ -38,9 +39,9 @@ export const InputField = forwardRef<TextInput, InputFieldProps>((props, ref) =>
     <View className="mb-4 w-full">
 
       {label && (
-        <Text className="font-baloo text-lg font-semibold text-slate-800 mb-2">
+        <Text type={"header"} className="text-lg text-slate-800 mb-1">
           {label}
-          {compulsory && <Text className="text-red-500"> *</Text>}
+          {compulsory && <Text type={"header"} className="text-red-500"> *</Text>}
         </Text>
       )}
 
