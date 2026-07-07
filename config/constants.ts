@@ -4,4 +4,6 @@ export const GOOGLE_MAP_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_MAP_API_KEY as 
 export const ACTIVITIES_PER_PAGE = 6;
 
 
-export const LOGO = require('../assets/images/Logo.png');
+export const LOGO = require('../assets/images/logo.png');
+export const WHITELOGO = require("../assets/images/whitelogo.png")
+export const GOOGLE = require('../assets/images/google.png');

@@ -22,7 +22,8 @@ export default function SignupForm({onSuccess}: LoginFormProps) {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-6 pt-16">
+    <ScrollView className="flex-1 bg-white p-6 pt-16"
+      contentContainerClassName="flex-1 justify-center">
       <Text className="text-3xl font-bold text-slate-900 font-baloo mb-2">
         Create Account
       </Text>
