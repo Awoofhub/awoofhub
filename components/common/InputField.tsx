@@ -4,7 +4,7 @@ import React, { forwardRef, useState } from 'react';
 import { TextInput, TextInputProps, TouchableOpacity, View } from 'react-native';
 
 export interface InputFieldProps extends TextInputProps {
-  type?: 'text' | 'email' | 'password' | 'textarea' | 'confirmPassword';
+  type?: 'text' | 'email' | 'password' | 'textarea';
   label?: string;
   textAreaRows?: number;
   error?: { message?: string };
@@ -31,7 +31,7 @@ export const InputField = forwardRef<TextInput, InputFieldProps>((props, ref) =>
   const [showPassword, setShowPassword] = useState(false);
   const [focused, setFocused] = useState(false);
 
-  const isPassword = type === 'password' || type === 'confirmPassword';
+  const isPassword = type === 'password';
   const isEmail = type === 'email';
   const isTextArea = type === 'textarea';
 
@@ -70,7 +70,7 @@ export const InputField = forwardRef<TextInput, InputFieldProps>((props, ref) =>
           }
           numberOfLines={isTextArea ? textAreaRows : 1}
           style={isTextArea ? { textAlignVertical: 'top' } : undefined}
-          className={`flex-1 px-3 text-base text-slate-900 rounded-md font-mont border
+          className={`flex-1 px-3 text-base text-slate-900 rounded-md font-baloo border
             ${isTextArea ? 'h-auto py-3' : ''} 
             ${icon && !isTextArea ? 'pl-11' : ''}
             ${isPassword ? 'pr-11' : ''}
@@ -87,9 +87,9 @@ export const InputField = forwardRef<TextInput, InputFieldProps>((props, ref) =>
             onPress={() => setShowPassword(!showPassword)}
           >
             {showPassword ? (
-              <EyeOff size={20} color="#718096" />
-            ) : (
               <Eye size={20} color="#718096" />
+            ) : (
+              <EyeOff size={20} color="#718096" />
             )}
           </TouchableOpacity>
         )}

@@ -1,15 +1,18 @@
 import Text from '@/components/common/Text';
 import LoadingModal from "@/components/modal/LoadingModal";
-import { GOOGLE, WHITELOGO } from "@/config/constants";
+import { WHITELOGO } from "@/config/constants";
 import { useLogin } from "@/features/auth/useLogin";
 import { LoginData } from "@/types/auth";
 import { LoginFormProps } from "@/types/form-props";
+import { Link } from "expo-router";
 import { Lock, Mail } from "lucide-react-native";
 import { Controller, useForm } from "react-hook-form";
 import { Image, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { InputField } from "../common/InputField";
-import { useRouter } from 'expo-router';
+import GoogleButton from './GoogleButton';
+import ORdivider from './ORdivider';
+
 
 
 export default function LoginForm({ onSuccess }: LoginFormProps) {
@@ -25,7 +28,6 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   const onSubmit = (data: LoginData) => {
     login.submit(data);
   };
-  const router = useRouter();
 
   return (
     <SafeAreaView className="flex-1 bg-[#F15A22] px-5">
@@ -57,7 +59,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
                 <Text type={"headerBold"} className="text-[#0F172A] text-[24px]">
                   Welcome
                 </Text>
-                <Text type={"headerBold"} className="text-[#F15A22] text-[24px]">
+                <Text type={"headerBold"} className="text-primary text-[24px]">
                   Back!
                 </Text>
               </View>
@@ -96,7 +98,6 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
               )}
             />
 
-            {/* Password */}
             <Controller
               control={control}
               name="password"
@@ -126,7 +127,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
             />
             <View className="flex-row items-center justify-end mb-9">
               <TouchableOpacity>
-                <Text type={"paragraphBold"} className="text-sm text-orange-500">
+                <Text type={"paragraphBold"} className="text-sm text-primary">
                   Forgot Password?
                 </Text>
               </TouchableOpacity>
@@ -136,47 +137,30 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
             <TouchableOpacity
               onPress={handleSubmit(onSubmit)}
               activeOpacity={0.85}
-              className="bg-orange-500 h-12 rounded-lg items-center justify-center shadow-sm"
+              className="bg-primary h-12 rounded-lg items-center justify-center shadow-sm"
             >
               <Text type={"headerBold"} className="text-white text-lg">
                 Login
               </Text>
             </TouchableOpacity>
 
-            {/* OR divider */}
-            <View className="flex-row items-center my-5 gap-3">
-              <View className="flex-1 h-px bg-gray-300" />
-              <Text className="text-gray-600 text-xs font-montserrat">
-                {" "}
-                OR{" "}
-              </Text>
-              <View className="flex-1 h-px bg-gray-300" />
-            </View>
+            <ORdivider />
 
-            {/* Google SSO */}
-            <TouchableOpacity
-              activeOpacity={0.8}
-              className="flex-row items-center justify-center border border-gray-200 rounded-lg h-12 gap-3"
-            >
-              <Image
-                source={GOOGLE}
-                className="w-6 h-6"
-              />
-              <Text type={"paragraphBold"} className="text-sm text-gray-700">
-                Continue with Google
-              </Text>
-            </TouchableOpacity>
+            <GoogleButton />
 
             {/* Sign up link */}
             <View className="flex-row justify-center mt-6">
               <Text type={"paragraphBold"} className="text-sm text-gray-500">
                 Don't have an account?{" "}
               </Text>
-              <TouchableOpacity>
-                <Text type={"paragraphBold"} className="text-sm text-orange-500">
-                  Sign up
-                </Text>
-              </TouchableOpacity>
+
+              <Link href="/(auth)/signup" asChild>
+                <TouchableOpacity activeOpacity={0.9}>
+                  <Text type={"paragraphBold"} className="text-sm text-primary">
+                    Sign up
+                  </Text>
+                </TouchableOpacity>
+              </Link>
             </View>
           </View>
         </ScrollView>

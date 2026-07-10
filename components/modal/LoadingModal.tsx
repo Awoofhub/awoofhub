@@ -14,8 +14,8 @@ export default function LoadingModal({ visible }: Props) {
         dismissable={false}
         contentContainerStyle={{
           backgroundColor: "white",
-          marginHorizontal: 32,
-          paddingVertical: 24, 
+          alignSelf: "center", 
+          paddingVertical: 24,
           paddingHorizontal: 24,
           borderRadius: 24,
           alignItems: "center",

@@ -1,31 +1,27 @@
-import { LoginFormProps,SignupFormProps } from "@/types/form-props";
+import Text from '@/components/common/Text';
+import { useSignup } from "@/features/auth/useSignup";
+import { SignupFormProps } from "@/types/form-props";
+import { Link } from "expo-router";
 import { Lock, Mail, User } from "lucide-react-native";
 import { Controller, useForm } from "react-hook-form";
-import { useSignup } from "@/features/auth/useSignup";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-  KeyboardAvoidingView,
-  Platform,
-  ImageBackground,
-  Image,
-  ActivityIndicator,
-} from "react-native";
+import { ImageBackground, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View } from "react-native";
 import { InputField } from "../common/InputField";
-import { useRouter } from "expo-router";
-import { SignupData, SignupFormData } from "@/types/auth";
+import LoadingModal from '../modal/LoadingModal';
+import GoogleButton from "./GoogleButton";
+import ORdivider from "./ORdivider";
+
+interface SignupFormData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  name: string;
+};
 
 export default function SignupForm({ onSuccess }: SignupFormProps) {
-  // 1. Initialize useForm with your fieldsY
+
   const signup = useSignup({ onSuccess });
 
-  const {
-    control,
-    handleSubmit,
-    watch,
-  } = useForm<SignupFormData>({
+  const { control, handleSubmit, watch } = useForm<SignupFormData>({
     defaultValues: {
       name: "",
       email: "",
@@ -36,13 +32,16 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
 
   const onSubmit = async (data: SignupFormData) => {
     const { confirmPassword, ...signUpData } = data;
-    await signup.submit(signUpData as SignupData);
+
+    try {
+      await signup.submit(signUpData);
+    } catch (error) {
+      // Error is handled globally by the apiClient interceptor toast  
+    }
   };
-  const router = useRouter();
 
   return (
     <KeyboardAvoidingView
-      className="flex-1"
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
@@ -50,7 +49,8 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* bg-image */}
+        <LoadingModal visible={signup.isPending} />
+
         <ImageBackground
           source={require("@/assets/images/awoofhubimage-background.png")}
           className="h-80 bg-[#F15A22] px-5 pb-12 pt-7 items-center"
@@ -65,25 +65,23 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
           </View>
         </ImageBackground>
 
-        {/* Form */}
-        <View className="-mt-10 bg-white rounded-3xl mx-4 p-6">
-          <View className="flex-row items-end justify-start mb-6 gap-2">
-            <Text className="text-3xl text-slate-900 font-mont-bold mb-2">
+        <View className="-mt-10 mb-10 bg-white rounded-3xl mx-4 p-6">
+          <View className="flex-row items-end justify-start gap-2">
+            <Text className="text-[21px] text-slate-900 font-mont-bold">
               Create your
             </Text>
-            <Text className="text-3xl text-[#F15A22] font-mont-bold mb-2">
+            <Text className="text-[21px] text-[#F15A22] font-mont-bold">
               awoof
             </Text>
-            <Text className="text-3xl text-slate-900 font-mont-bold mb-2">
+            <Text className="text-[21px] text-slate-900 font-mont-bold">
               account
             </Text>
           </View>
-          <Text className="text-xl text-slate-500 font-mont mb-8">
+          <Text className="text-xl text-slate-500 font-mont mb-6">
             Join the Awoofers community! Spend less, save more, publish deals
             and reach active audiences
           </Text>
 
-          {/* --- FULL NAME FIELD --- */}
           <Controller
             control={control}
             name="name"
@@ -97,12 +95,11 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
                 onChangeText={onChange}
                 onBlur={onBlur}
                 value={value}
-                error={fieldState.error} // Pass down the error state object
+                error={fieldState.error}
               />
             )}
           />
 
-          {/* --- EMAIL FIELD --- */}
           <Controller
             control={control}
             name="email"
@@ -128,7 +125,6 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
             )}
           />
 
-          {/* --- PASSWORD FIELD --- */}
           <Controller
             control={control}
             name="password"
@@ -154,7 +150,6 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
             )}
           />
 
-          {/* --- CONFIRM PASSWORD FIELD --- */}
           <Controller
             control={control}
             name="confirmPassword"
@@ -166,7 +161,7 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
             render={({ field: { onChange, onBlur, value }, fieldState }) => (
               <InputField
                 label="Confirm Password"
-                type="confirmPassword"
+                type="password"
                 placeholder="••••••••"
                 compulsory
                 icon={<Lock size={20} color="#F15A22" />}
@@ -178,62 +173,31 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
             )}
           />
 
-          {/* --- SUBMIT BUTTON --- */}
           <TouchableOpacity
             onPress={handleSubmit(onSubmit)}
-            disabled={signup.isPending}
-            className="mt-4 bg-orange-500 h-12 gap-3 mb-3 rounded-md items-center justify-center shadow-sm active:opacity-80"
+            activeOpacity={0.85}
+            className="bg-primary h-12 rounded-lg items-center justify-center shadow-sm"
           >
-            {signup.isPending ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text className="text-white text-base font-semibold font-mont-bold">
-                Create Account
-              </Text>
-            )}
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            activeOpacity={0.8}
-            className="flex-row items-center justify-center border border-gray-200 rounded-lg h-12 gap-3"
-          >
-            <Text className="text-sm  text-gray-700 font-mont-bold">
-              Continue As Guest
+            <Text type={"headerBold"} className="text-white text-lg">
+              Create Account
             </Text>
           </TouchableOpacity>
 
-          {/* OR divider */}
-          <View className="flex-row items-center my-5 gap-3">
-            <View className="flex-1 h-px bg-gray-200" />
-            <Text className="text-gray-400 text-xs font-montserrat"> OR </Text>
-            <View className="flex-1 h-px bg-gray-200" />
-          </View>
+          <ORdivider />
+          <GoogleButton />
 
-          {/* Google SSO */}
-          <TouchableOpacity
-            activeOpacity={0.8}
-            className="flex-row items-center justify-center border border-gray-200 rounded-lg h-12 gap-3"
-          >
-            {/* Swap for actual Google SVG icon */}
-            <Image
-              source={require("./../../assets/images/google.png")}
-              className="w-6 h-6"
-            />
-            <Text className="text-sm text-gray-700 font-mont-bold">
-              Continue with Google
-            </Text>
-          </TouchableOpacity>
-
-          {/* Sign up link */}
           <View className="flex-row justify-center mt-6">
             <Text className="text-sm text-gray-500 font-mont">
               Don't have an account?{" "}
             </Text>
-            <TouchableOpacity onPress={() => router.push("/(auth)/login")}>
-              <Text className="text-sm text-orange-500 font-mont-bold">
-                Login
-              </Text>
-            </TouchableOpacity>
+
+            <Link href="/(auth)/login" asChild>
+              <TouchableOpacity activeOpacity={0.9}>
+                <Text type={"paragraphBold"} className="text-sm text-primary">
+                  Login
+                </Text>
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
       </ScrollView>
