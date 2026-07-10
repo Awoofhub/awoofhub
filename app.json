@@ -8,7 +8,8 @@
     "scheme": "awoofhub",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mosesmartins.awoofhub"
     },
     "android": {
       "adaptiveIcon": {
@@ -35,7 +36,13 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.681681925443-apj67sqbor009es3l7j6j9n4rkvs1qrc"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

@@ -1,5 +1,7 @@
+import { EXPO_PUBLIC_GOOGLE_IOS_ID, EXPO_PUBLIC_GOOGLE_WEB_ID } from '@/config/constants';
 import AppProvider from '@/providers/app-provider';
 import { FONTS } from '@/styles/fonts';
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -19,6 +21,11 @@ export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
 };
+
+GoogleSignin.configure({
+  webClientId: EXPO_PUBLIC_GOOGLE_WEB_ID,
+  iosClientId: EXPO_PUBLIC_GOOGLE_IOS_ID,
+});
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

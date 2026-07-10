@@ -184,7 +184,8 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
           </TouchableOpacity>
 
           <ORdivider />
-          <GoogleButton />
+          
+          <GoogleButton onSuccess={onSuccess} />
 
           <View className="flex-row justify-center mt-6">
             <Text className="text-sm text-gray-500 font-mont">
