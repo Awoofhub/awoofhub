@@ -25,6 +25,10 @@ export interface LoginData {
   password: string;
 };
 
+export interface GoogleLoginData {
+  idToken: string
+}
+
 export type AuthTokens = {
   accessToken: string;
   refreshToken: string;

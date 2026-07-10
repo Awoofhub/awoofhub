@@ -2,12 +2,18 @@ import { refreshClient } from '@/lib/refreshClient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiClient } from "../lib/apiClient";
 import { ApiResponse } from "../types/api-response";
-import { AuthTokens, EmailData, LoginData, LoginResponse, ResetPasswordData, SignupData, VerifyEmailData } from "../types/auth";
+import { AuthTokens, EmailData, GoogleLoginData, LoginData, LoginResponse, ResetPasswordData, SignupData, VerifyEmailData } from "../types/auth";
 
 
 // Login
 export async function loginService(payload: LoginData): Promise<ApiResponse<LoginResponse>> {
   const res: ApiResponse<LoginResponse> = await apiClient.post('/auth/login/', payload)
+
+  return res;
+}
+
+export async function googleLoginService(payload: GoogleLoginData): Promise<ApiResponse<LoginResponse>> {
+  const res: ApiResponse<LoginResponse> = await apiClient.post('/auth/mobile/google/', payload)
 
   return res;
 }

@@ -146,7 +146,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
 
             <ORdivider />
 
-            <GoogleButton />
+            <GoogleButton onSuccess={onSuccess} />
 
             {/* Sign up link */}
             <View className="flex-row justify-center mt-6">

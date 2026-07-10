@@ -44,10 +44,10 @@ export default function CustomDrawerContent() {
                         {user.profileImageUrl ? (
                             <Image
                                 source={{ uri: user.profileImageUrl }}
-                                className="w-50 h-50 rounded-full"
+                                className="w-100 h-100 rounded-full"
                             />
                         ) : (
-                            <View className="w-50 h-50 bg-gray-300 justify-center items-center rounded-full">
+                            <View className="w-100 h-100 bg-gray-300 justify-center items-center rounded-full">
                                 <FontAwesome name="user" size={24} color="gray" />
                             </View>
                         )}
