@@ -7,7 +7,7 @@ import { LoginFormProps } from "@/types/form-props";
 import { Link } from "expo-router";
 import { Lock, Mail } from "lucide-react-native";
 import { Controller, useForm } from "react-hook-form";
-import { Image, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View, ImageBackground } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { InputField } from "../common/InputField";
 import GoogleButton from './GoogleButton';
@@ -30,7 +30,13 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F15A22] px-5">
+    <ImageBackground
+      source={require("@/assets/images/loginvectorbgshape.png")}
+      className="flex-1 bg-[#f15922c7] "
+      resizeMode='cover'  
+      >
+
+    <SafeAreaView className="flex-1 px-5">
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -40,9 +46,10 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
+
           <LoadingModal visible={login.isPending} />
 
-          <View className="h-44 bg-[#F15A22] px-5 pb-5 pt-7 items-center">
+          <View className="h-44 px-5 pb-5 pt-7 items-center">
             {/* Logo */}
             <Image
               source={WHITELOGO}
@@ -166,5 +173,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView >
+    </ImageBackground>
+
   );
 }
