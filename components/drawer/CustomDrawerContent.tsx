@@ -22,9 +22,6 @@ export default function CustomDrawerContent() {
 
     const { submit: logout } = useLogout({
         onSuccess: () => {
-            if (rootNavRef.isReady()) {
-                rootNavRef.dispatch(DrawerActions.closeDrawer());
-            }
             router.replace('/login');
         },
     });
@@ -60,7 +57,7 @@ export default function CustomDrawerContent() {
                             {
                                 label: "Profile",
                                 icon: User,
-                                action: () => navigate(`/profile/${user.id}`),
+                                action: () => navigate(`/profile/${user.username}`),
                             },
                             {
                                 label: "Messages",

@@ -7,7 +7,7 @@ import { LoginFormProps } from "@/types/form-props";
 import { Link } from "expo-router";
 import { Lock, Mail } from "lucide-react-native";
 import { Controller, useForm } from "react-hook-form";
-import { Image, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View, ImageBackground } from "react-native";
+import { Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { InputField } from "../common/InputField";
 import GoogleButton from './GoogleButton';
@@ -32,8 +32,8 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   return (
     <ImageBackground
       source={require("@/assets/images/loginvectorbgshape.png")}
-      className="flex-1 bg-[#f15922c7] "
-      resizeMode='cover'  
+      className="flex-1 bg-primary"
+      resizeMode='contain'  
       >
 
     <SafeAreaView className="flex-1 px-5">

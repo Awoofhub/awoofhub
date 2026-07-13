@@ -1,5 +1,5 @@
 import Text from '@/components/common/Text';
-import { Eye, EyeOff } from 'lucide-react-native';
+import { Eye, EyeClosed } from 'lucide-react-native';
 import React, { forwardRef, useState } from 'react';
 import { TextInput, TextInputProps, TouchableOpacity, View } from 'react-native';
 
@@ -89,7 +89,7 @@ export const InputField = forwardRef<TextInput, InputFieldProps>((props, ref) =>
             {showPassword ? (
               <Eye size={20} color="#718096" />
             ) : (
-              <EyeOff size={20} color="#718096" />
+              <EyeClosed size={20} color="#718096" />
             )}
           </TouchableOpacity>
         )}
