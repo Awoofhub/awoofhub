@@ -10,7 +10,7 @@ import ExpandableSearchForm from './ExpandableSearchForm';
 
 
 interface HeaderProps {
-    isHome?: boolean;
+  isHome?: boolean;
 }
 
 export default function Header({ isHome = true }: HeaderProps) {
@@ -33,25 +33,32 @@ export default function Header({ isHome = true }: HeaderProps) {
                 </TouchableOpacity>
             )}
 
-            <Image source={LOGO} style={{ width: 160, height: 50 }} resizeMode="contain" />
+          <Image
+            source={LOGO}
+            style={{ width: 160, height: 50 }}
+            resizeMode="contain"
+          />
 
-            {isHome ? (
-                <TouchableOpacity onPress={() => {
-                    router.push("/offers")
-                    openSearch();
-                }}>
-                    <Fontisto name="search" size={20} color="black" />
-                </TouchableOpacity>
-
-            ) : (
-                <>
-                    <ExpandableSearchForm onOpen={openSearch} />
-                    <ExpandableSearchForm
-                        isOverlay
-                        isOpen={isSearchOpen}
-                        onClose={closeSearch} />
-                </>
-            )}
+          {isHome ? (
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/offers");
+                openSearch();
+              }}
+            >
+              <Fontisto name="search" size={20} color="black" />
+            </TouchableOpacity>
+          ) : (
+            <>
+              <ExpandableSearchForm onOpen={openSearch} />
+              <ExpandableSearchForm
+                isOverlay
+                isOpen={isSearchOpen}
+                onClose={closeSearch}
+              />
+            </>
+          )}
         </View>
-    );
-};
+  
+  );
+}
