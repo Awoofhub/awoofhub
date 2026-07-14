@@ -1,4 +1,4 @@
-import { EXPO_PUBLIC_GOOGLE_IOS_ID, EXPO_PUBLIC_GOOGLE_WEB_ID } from '@/config/constants';
+import { GOOGLE_IOS_ID, GOOGLE_WEB_ID } from '@/config/constants';
 import AppProvider from '@/providers/app-provider';
 import { FONTS } from '@/styles/fonts';
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
@@ -23,8 +23,8 @@ export const unstable_settings = {
 };
 
 GoogleSignin.configure({
-  webClientId: EXPO_PUBLIC_GOOGLE_WEB_ID,
-  iosClientId: EXPO_PUBLIC_GOOGLE_IOS_ID,
+  webClientId: GOOGLE_WEB_ID,
+  iosClientId: GOOGLE_IOS_ID,
 });
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.

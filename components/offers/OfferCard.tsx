@@ -1,74 +1,23 @@
 import Flame from "@/assets/images/flame.svg";
 import Text from '@/components/common/Text';
 import { Offer } from "@/types/offer";
-import { differenceInSeconds, parseISO } from "date-fns";
+import { formatCountdown } from "@/utils/formatCountdown";
 import { Link } from "expo-router";
 import { AlarmClock, Star, User, Users } from "lucide-react-native";
-import { useEffect, useMemo, useState } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { StarRatingDisplay } from "react-native-star-rating-widget";
 import WishlistButton from "../wishlist/WishlistButton";
+import { getOfferVariant, useOfferCountdown } from "./Getoffervariant";
+import { LocationIconFor, ValueIconFor } from "./Offercardicons";
 
 interface Props {
   offer: Offer;
 }
 
-function getOfferVariant(offer: Offer) {
-  const isTrending = offer.clickCount >= 1;
-
-  const secondsLeft = differenceInSeconds(
-    parseISO(offer.endDate),
-    new Date()
-  );
-
-  const isExpiring =
-    secondsLeft >= 0 && secondsLeft <= 60 * 60 * 24 * 3;
-
-  if (isTrending && isExpiring) return "trending-expiring";
-  if (isTrending) return "trending";
-  if (isExpiring) return "expiring";
-
-  return "regular";
-}
-
-function formatCountdown(seconds: number) {
-  const days = Math.floor(seconds / 86400);
-  const hours = Math.floor((seconds % 86400) / 3600);
-  const mins = Math.floor((seconds % 3600) / 60);
-
-  return `${days}d ${hours}h ${mins}m`;
-}
-
 export default function OfferCard({ offer }: Props) {
-  const variant = useMemo(() => getOfferVariant(offer), [offer]);
 
-  const hasCountdown =
-    variant === "expiring" ||
-    variant === "trending-expiring";
-
-  const [secondsLeft, setSecondsLeft] = useState(
-    Math.max(
-      0,
-      differenceInSeconds(parseISO(offer.endDate), new Date())
-    )
-  );
-
-  useEffect(() => {
-    if (!hasCountdown) return;
-
-    const timer = setInterval(() => {
-      setSecondsLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [hasCountdown]);
+  const variant = getOfferVariant(offer);
+  const { secondsLeft, hasCountdown } = useOfferCountdown(offer, variant);
 
   return (
 
@@ -100,91 +49,113 @@ export default function OfferCard({ offer }: Props) {
         </View>
 
         <View className="flex-1">
-
-          {/* Username */}
           <View className="flex-row justify-between items-center mb-1">
-            <Text className="text-primary text-[11px]">
+            <Text
+              numberOfLines={1}
+              className="max-w-[55%] text-primary text-[10px] font-medium"
+            >
               @{offer.contributor.username}
             </Text>
 
-            <View className="flex-row items-center bg-orange-100 rounded-full px-2 py-1">
-              <User size={10} color="#ff5b00" />
-              <Text className="text-primary text-[10px] ml-1">
-                Awoofer
-              </Text>
+            <View className="flex-row items-center gap-1">
+              <User size={10} color="#888" />
+              <Text className="text-gray-500 text-[10px]">Awoofer</Text>
             </View>
           </View>
 
-          <Text
-            type="headerBold"
-            numberOfLines={1}
-            className="text-sm"
-          >
-            {offer.title}
-          </Text>
+          {/* Card Content */}
+          <View>
+            <Text
+              type="headerBold"
+              numberOfLines={1}
+              className="text-sm mb-0.5"
+            >
+              {offer.title}
+            </Text>
 
-          <Text
-            numberOfLines={2}
-            className="text-gray-500 text-xs mb-2"
-          >
-            {offer.description}
-          </Text>
-
-          {/* Rating */}
-          <View className="flex-row justify-between items-center mb-2">
-
-            <View className="flex-row items-center">
-              <StarRatingDisplay
-                rating={offer.avgRating}
-                maxStars={5}
-                starSize={12}
-                StarIconComponent={({ type, size }) => {
-                  const iconSize = size;
-                  if (type === 'full') {
-                    return <Star size={iconSize} color="#FFD700" fill="#FFD700" />;
-                  }
-                  if (type === 'half') {
-                    return <Star size={iconSize} color="#ffe033" fill="#ffe033" opacity={0.7} />;
-                  }
-                  return <Star size={iconSize} color="#ccd1d8" fill="#ccd1d8" />;
-                }}
-
-                starStyle={{ marginHorizontal: -0.5 }}
-              />
-
-              <Text className="text-xs text-gray-400 ml-1">
-                ({offer.reviewCount})
+            {/* Deal value */}
+            <View className="flex-row items-center gap-1 mb-0.5">
+              <ValueIconFor dealType={offer.dealType} />
+              <Text
+                type="paragraphBold"
+                numberOfLines={1}
+                className="text-primary text-sm flex-shrink"
+              >
+                {offer.value}
               </Text>
             </View>
 
-            {hasCountdown && (
-              <View className="flex-row items-center">
-                <Users size={12} color="#888" />
-                <Text className="text-[11px] ml-1">
-                  {offer.clickCount} grabs
+            {/* Location + grabs */}
+            <View className="flex-row justify-between items-center mb-2">
+              <View
+                className={`flex-row items-center gap-1 ${offer.clickCount > 0 ? "max-w-[50%]" : "flex-1"
+                  }`}
+              >
+                <LocationIconFor location={offer.location} />
+                <Text
+                  numberOfLines={1}
+                  className="text-gray-500 text-xs flex-shrink"
+                >
+                  {offer.location}
                 </Text>
               </View>
-            )}
-          </View>
 
-          {/* Bottom row */}
-          <View className="flex-row items-center mb-3">
+              {offer.clickCount > 0 && (
+                <View className="flex-row items-center gap-1">
+                  <Users size={12} color="#888" />
+                  <Text className="text-[11px] text-gray-500">
+                    {offer.clickCount}{" "}
+                    {offer.clickCount === 1 ? "grab" : "grabs"}
+                  </Text>
+                </View>
+              )}
+            </View>
 
-            {hasCountdown ? (
-              <>
-                <AlarmClock size={15} color="#E70606" />
-                <Text type="paragraphBold" className="text-red-600 text-xs ml-1">
-                  {formatCountdown(secondsLeft)}
+            <View className="h-px bg-gray-200 mb-2" />
+
+            {/* Rating + countdown */}
+            <View className="flex-row justify-between items-center">
+              <View className="flex-row items-center">
+                <StarRatingDisplay
+                  rating={offer.avgRating}
+                  maxStars={5}
+                  starSize={12}
+                  StarIconComponent={({ type, size }) => {
+                    if (type === "full") {
+                      return <Star size={size} color="#FFD700" fill="#FFD700" />;
+                    }
+                    if (type === "half") {
+                      return (
+                        <Star
+                          size={size}
+                          color="#FFE033"
+                          fill="#FFE033"
+                          opacity={0.7}
+                        />
+                      );
+                    }
+                    return <Star size={size} color="#CCD1D8" fill="#CCD1D8" />;
+                  }}
+                  starStyle={{ marginHorizontal: -0.5 }}
+                />
+
+                <Text className="text-xs text-gray-400 ml-1">
+                  ({offer.reviewCount})
                 </Text>
-              </> 
-            ) : (
-              <>
-                <Users size={14} color="#888" />
-                <Text className="text-xs ml-1">
-                  {offer.clickCount} grabs
-                </Text>
-              </>
-            )}
+              </View>
+
+              {hasCountdown && (
+                <View className="flex-row items-center gap-1">
+                  <AlarmClock size={14} color="#E70606" />
+                  <Text
+                    type="paragraphBold"
+                    className="text-red-600 text-xs"
+                  >
+                    {formatCountdown(secondsLeft)}
+                  </Text>
+                </View>
+              )}
+            </View>
           </View>
         </View>
       </TouchableOpacity>

@@ -1,6 +1,6 @@
 import Loading from '@/components/loading/Loading';
 import { useCategory } from '@/features/category/useCategory';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { FlatList, LayoutChangeEvent, View } from 'react-native';
 import Animated, {
   useAnimatedScrollHandler,
@@ -14,7 +14,10 @@ import TabBar from './TabBar';
 export default function ScrollSyncTabBar() {
   const { data: categories = [], isFetching } = useCategory();
 
-  const tabs = categories.map(item => item.name);
+  const tabs = useMemo(
+  () => categories.map(c => c.name),
+  [categories]
+);
 
   const heightRef = useRef<number[]>([]);
   const sectionYSv = useSharedValue<number[]>([]);
@@ -24,7 +27,7 @@ export default function ScrollSyncTabBar() {
 
   const onLayoutHandler = (event: LayoutChangeEvent, index: number) => {
     const { height } = event.nativeEvent.layout;
-
+  
     heightRef.current[index] = height;
 
     const measuredCount = heightRef.current.filter(h => h !== undefined).length;
@@ -50,10 +53,10 @@ export default function ScrollSyncTabBar() {
     }
   };
 
-  const listData = [
-    { type: 'tabbar', id: 'tabbar' },
-    ...categories,
-  ];
+  const listData = useMemo(
+  () => [{ type: 'tabbar', id: 'tabbar' }, ...categories],
+  [categories]
+);
 
   const onScrollHandler = useAnimatedScrollHandler({
     onScroll: event => {

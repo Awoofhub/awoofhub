@@ -22,7 +22,6 @@ export default function TabBar({
   scrollToIndex: (index: number) => void;
   userDragged: SharedValue<boolean>;
 }) {
-  const countRef = useRef(0);
   const widthRef = useRef(Array(tabs.length).fill(0));
   const sectionXsSv = useSharedValue(Array(tabs.length).fill(0));
   const widthSv = useSharedValue(Array(tabs.length).fill(0));
@@ -33,21 +32,23 @@ export default function TabBar({
 
   const layoutHandler = (event: LayoutChangeEvent, index: number) => {
     const { width } = event.nativeEvent.layout;
+
     widthRef.current[index] = width;
-    countRef.current++;
 
-    if (countRef.current === tabs.length) {
-      let xSum = 0;
-      const sectionXs: number[] = [0];
-
-      for (let i = 0; i < tabs.length; i++) {
-        xSum += widthRef.current[i];
-        sectionXs.push(xSum);
-      }
-
-      sectionXsSv.value = [...sectionXs];
-      widthSv.value = [...widthRef.current];
+    if (!widthRef.current.every(width => width > 0)) {
+      return;
     }
+
+    let xSum = 0;
+    const sectionXs: number[] = [0];
+
+    for (let i = 0; i < tabs.length; i++) {
+      xSum += widthRef.current[i];
+      sectionXs.push(xSum);
+    }
+
+    sectionXsSv.value = sectionXs;
+    widthSv.value = [...widthRef.current];
   };
 
   const indicatorStyle = useAnimatedStyle(() => {
@@ -81,13 +82,16 @@ export default function TabBar({
         animated: true,
       });
     }
-    setActiveTabIndex(index);
+
+    setActiveTabIndex(prev => (prev === index ? prev : index));
   };
 
   useAnimatedReaction(
     () => activeIndex.value,
-    index => {
-      scheduleOnRN(onPressTabBarItem, index);
+    (index, previous) => {
+      if (index !== previous) {
+        scheduleOnRN(onPressTabBarItem, index);
+      }
     },
   );
 

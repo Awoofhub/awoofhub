@@ -9,7 +9,7 @@ export default function MainLayout() {
   return (
     <Protected>
       <SearchProvider>
-        <StatusBar style="light" />
+        <StatusBar style="dark" />
         <Stack>
           <Stack.Screen name="offers" options={{ headerShown: false }} />
           <Stack.Screen name="(drawer)" options={{ headerShown: false }} />

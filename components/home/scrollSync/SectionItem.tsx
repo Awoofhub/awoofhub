@@ -24,9 +24,13 @@ function SectionItem({ item, onLayout, index }: Props) {
     });
 
     const offers = data?.pages.flatMap((page) => page.data) ?? [];
+    
 
     return (
-        <View className="pb-5" onLayout={e => onLayout(e, index)}>
+        <View className="pb-5" onLayout={e => {
+            if (!isLoading && isFetched) {
+                onLayout(e, index);
+            }}}>
             {/* Header */}
             <View className="px-5 py-3 flex flex-row justify-between items-center">
                 <Text type="headerBold" className="text-[18px] text-[#1C1C1E]">
@@ -35,7 +39,7 @@ function SectionItem({ item, onLayout, index }: Props) {
 
                 <Link href={`/offers?category=${item.slug}`} asChild>
                     <Pressable className="flex-row items-center gap-1">
-                        <Text type="headerBold"  className="text-orange-600 text-sm">
+                        <Text type="headerBold" className="text-orange-600 text-sm">
                             View all
                         </Text>
                         <Feather name="arrow-right" size={16} color="#EA580C" />
@@ -50,5 +54,5 @@ function SectionItem({ item, onLayout, index }: Props) {
 }
 
 export default memo(SectionItem, (prevProps, nextProps) => {
-  return prevProps.item.id === nextProps.item.id && prevProps.index === nextProps.index;
+    return prevProps.item.id === nextProps.item.id && prevProps.index === nextProps.index;
 });

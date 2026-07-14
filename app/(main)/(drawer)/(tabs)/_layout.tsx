@@ -10,12 +10,12 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: 'gray',
+        tabBarInactiveTintColor: 'black',
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
           borderTopWidth: 1,
           borderTopColor: '#E5E7EB',
-          height: 75,
+          height: 70,
           paddingBottom: Platform.OS === 'ios' ? 28 : 10,
           paddingTop: 5,
         },
@@ -30,8 +30,9 @@ export default function TabLayout() {
         name="(home)"
         options={{
           title: 'Home',
+          tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
-            <Feather name="home" size={24} color={color} />
+            <Feather name="home" size={26} color={color} />
           ),
         }}
       />
@@ -40,8 +41,9 @@ export default function TabLayout() {
         name="posts"
         options={{
           title: 'My posts',
+          tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
-            <Feather name="list" size={26} color={color} />
+            <Feather name="list" size={28} color={color} />
           ),
         }}
       />
@@ -51,8 +53,8 @@ export default function TabLayout() {
         options={{
           title: '',
           tabBarItemStyle: {
-        marginHorizontal: -10,
-      },
+            marginHorizontal: -10,
+          },
           tabBarIcon: () => (
             <View
               style={{
@@ -63,14 +65,9 @@ export default function TabLayout() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginTop: Platform.OS === 'ios' ? -15 : -25,
-                shadowColor: colors.primary,
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.3,
-                shadowRadius: 4,
-                elevation: 5, // Android shadow
               }}
             >
-              <FontAwesome5 name="plus" size={22} color="#FFFFFF"  />
+              <FontAwesome5 name="plus" size={22} color="#FFFFFF" />
             </View>
           ),
         }}
@@ -80,8 +77,9 @@ export default function TabLayout() {
         name="wishlist"
         options={{
           title: 'Wishlist',
+          tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
-            <Feather name="heart" size={24} color={color} />
+            <Feather name="heart" size={26} color={color} />
           ),
         }}
       />
@@ -90,8 +88,9 @@ export default function TabLayout() {
         name="notification"
         options={{
           title: 'Notifications',
+          tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
-            <Feather name="bell" size={24} color={color} />
+            <Feather name="bell" size={26} color={color} />
           ),
         }}
       />
