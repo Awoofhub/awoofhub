@@ -4,6 +4,8 @@ import { useUser } from "@/features/user/useUser";
 import { useLocalSearchParams } from "expo-router";
 import { View, Text } from "react-native";
 import ProfileCard from "@/components/profile/ProfileCard";
+import ProfileDeals from "@/components/profile/ProfileDeals";
+import Header from "@/components/header/Header";
 
 interface ProfileScreenProps {
   params: {
@@ -30,12 +32,13 @@ export default function ProfileScreen({ params }: ProfileScreenProps) {
   }
 
   const isOwnProfile = currentUser?.id === user.id;
-  console.log(user);
+
 
   return (
     <View className="flex-1 justify-center">
-      <View className="flex-1 flex-col gap-6 items-start">
-        <ProfileCard isOwnProfile={isOwnProfile} />
+      <View className="flex-1 flex-col items-start">
+        <ProfileCard isOwnProfile={isOwnProfile} profile={user} />
+        
       </View>
     </View>
   );

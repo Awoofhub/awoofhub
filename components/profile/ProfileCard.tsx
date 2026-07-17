@@ -1,42 +1,67 @@
-import { View, TouchableOpacity, Image, Text, Modal, Pressable } from "react-native";
+import { View, TouchableOpacity, Image, Modal, Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { format } from "date-fns";
+import { Link, useLocalSearchParams } from "expo-router";
 import { useUserByUsername } from "@/features/user/useUserByUsername";
 import { useUser } from "@/features/user/useUser";
-import { useOffersByUsername } from "@/features/offers/useOffersByUsername"; // kept in case the offers list lives below this card
-import { useLocalSearchParams } from "expo-router";
-import { Link } from "expo-router";
 import Loading from "../loading/Loading";
 import CommonText from "../common/Text";
-// swap for your existing plus icon import
-import { Ellipse, EllipseIcon, MapPinCheckInside, User, MessageCircleIcon ,PlusIcon} from "lucide-react-native";
-// Capitalizes the first letter for the fallback avatar initial
-function capitalizeFirstLetter(name?: string) {
-  if (!name) return "";
-  return name.charAt(0).toUpperCase();
-}
+import {
+  EllipseIcon,
+  MapPinCheckInside,
+  User,
+  MessageCircleIcon,
+  PlusIcon,
+  FlagIcon,
+} from "lucide-react-native";
+import { User as UserType } from "@/types/user";
+import OverflowMenu, { MenuItem } from "@/components/menu/DropDownMenu";
+import { capitalizeFirstLetter } from "@/utils/truncate";
 
 interface ProfileCardProps {
   isOwnProfile: boolean;
+  // Optional: the parent screen may already have this from a list/nav param,
+  // so we can render instantly instead of waiting on a fresh fetch.
+  profile?: UserType;
 }
 
-export default function ProfileCard({ isOwnProfile, }: ProfileCardProps) {
+export default function ProfileCard({ isOwnProfile, profile }: ProfileCardProps) {
   const { username: rawUsername } = useLocalSearchParams();
+  // useLocalSearchParams can return string | string[] depending on route config —
+  // normalize to a single string.
   const username = Array.isArray(rawUsername) ? rawUsername[0] : rawUsername;
 
   const { data: currentUser } = useUser();
-  // This is the actual source of truth for the card — not a `profile` prop.
-  const { data: user, isLoading: isUserLoading } = useUserByUsername({ username });
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // profile (if passed in) seeds the query as initialData so the card paints
+  // immediately; the hook then revalidates in the background and becomes the
+  // real source of truth once it resolves.
+  const { data: user, isLoading: isUserLoading } = useUserByUsername({
+    username,
+  });
+
+  // Only the report modal's open state lives here — the dropdown's open/close
+  // state is now owned internally by OverflowMenu, not this component.
   const [isReportOpen, setIsReportOpen] = useState(false);
+
+  // Config-driven menu items — see OverflowMenu for why this shape is reusable
+  // across any card (offers, comments, etc), not just profiles.
+  const profileMenuItems: MenuItem[] = [
+    {
+      key: "report",
+      label: "Report User",
+      icon: FlagIcon,
+      onPress: () => setIsReportOpen(true),
+      variant: "danger",
+    },
+  ];
 
   if (isUserLoading) return <Loading />;
 
   if (!user) {
     return (
-      <View className="flex-1 justify-center">
+      <View className="flex-1 justify-center items-center">
         <Text className="text-gray-500 text-lg">User not found</Text>
       </View>
     );
@@ -44,36 +69,18 @@ export default function ProfileCard({ isOwnProfile, }: ProfileCardProps) {
 
   return (
     <SafeAreaView className="flex-1 w-full bg-white rounded-2xl px-4 py-8 shadow-sm border border-gray-100">
-      {/* Report dropdown - top right, only for other users' profiles */}
+      {/* Report menu — top right, only visible on someone else's profile.
+          You can't report yourself. */}
       {!isOwnProfile && (
-        <View className="flex-1 justify-center items-center">
-          <TouchableOpacity
-            onPress={() => setIsDropdownOpen((prev) => !prev)}
-            className="p-2 rounded-xl bg-white"
-          >
-            <EllipseIcon width={18} height={18} stroke="#000" />
-          </TouchableOpacity>
-
-          {isDropdownOpen && (
-            <>
-              {/* Invisible full-screen pressable to close on outside tap */}
-              <Pressable
-                className="flex-1 justify-center items-center"
-                onPress={() => setIsDropdownOpen(false)}
-              />
-              <View className="flex-1 right-0 mt-2 border border-[#E70606] bg-white rounded-lg overflow-hidden">
-                <TouchableOpacity
-                  onPress={() => {
-                    setIsReportOpen(true);
-                    setIsDropdownOpen(false);
-                  }}
-                  className="w-full flex-row items-center justify-center gap-2 px-4 py-3"
-                >
-                  <Text className="text-[#E70606] font-medium">Report User</Text>
-                </TouchableOpacity>
+        <View className="absolute top-4 right-4">
+          <OverflowMenu
+            trigger={
+              <View className="p-2 rounded-xl bg-white">
+                <EllipseIcon width={18} height={18} stroke="#000" />
               </View>
-            </>
-          )}
+            }
+            items={profileMenuItems}
+          />
         </View>
       )}
 
@@ -87,7 +94,9 @@ export default function ProfileCard({ isOwnProfile, }: ProfileCardProps) {
               resizeMode="cover"
             />
           ) : (
-            <View className="bg-[#F7C8D5] flex-1 items-center  justify-center">
+            // Fallback: colored circle with the user's first initial when
+            // there's no profile image yet.
+            <View className="bg-[#F7C8D5] flex-1 items-center justify-center">
               <Text className="text-[#B85B80] text-3xl font-semibold">
                 {capitalizeFirstLetter(user.name)}
               </Text>
@@ -96,15 +105,21 @@ export default function ProfileCard({ isOwnProfile, }: ProfileCardProps) {
         </View>
 
         <View className="flex-row items-center gap-4 flex-wrap justify-center">
-          <CommonText type="headerBold" className=" text-black text-3xl">{user.name}</CommonText>
+          <CommonText type="headerBold" className="text-black text-3xl">
+            {user.name}
+          </CommonText>
           <View className="flex-row items-center gap-3 bg-[#FFF0EC] px-2 py-1 rounded-full">
-          <User width={15} height={15} color="#FF4D0D" />
-            <CommonText type="headerBold" className="text-primary text-xs font-semibold">Awoofer</CommonText>
+            <User width={15} height={15} color="#FF4D0D" />
+            <CommonText type="headerBold" className="text-primary text-xs font-semibold">
+              Awoofer
+            </CommonText>
           </View>
         </View>
 
         <View className="flex-row items-center gap-1 mt-1 flex-wrap justify-center">
-          <CommonText type="paragraph" className="text-black font-medium">@{user.username}</CommonText>
+          <CommonText type="paragraph" className="text-black font-medium">
+            @{user.username}
+          </CommonText>
           {user.address && (
             <>
               <Text className="text-black text-sm font-medium">•</Text>
@@ -115,9 +130,13 @@ export default function ProfileCard({ isOwnProfile, }: ProfileCardProps) {
         </View>
 
         {user.bio ? (
-          <CommonText className="text-gray-500 text-sm mt-3 text-center">{user.bio}</CommonText>
+          <CommonText className="text-gray-500 text-sm mt-3 text-center">
+            {user.bio}
+          </CommonText>
         ) : (
-          <CommonText type="paragraph" className="text-gray-500 mt-3 py-2">No bio added.</CommonText>
+          <CommonText type="paragraph" className="text-gray-500 mt-3 py-2">
+            No bio added.
+          </CommonText>
         )}
 
         <CommonText className="text-primary font-medium mt-3">
@@ -125,12 +144,12 @@ export default function ProfileCard({ isOwnProfile, }: ProfileCardProps) {
         </CommonText>
       </View>
 
-      {/* Message button - only for other users' profiles */}
+      {/* Message button — only on someone else's profile */}
       {!isOwnProfile && (
         <TouchableOpacity
           className="w-full mt-2 mb-6 flex-row items-center justify-center gap-1 border border-primary rounded-md py-2.5"
           onPress={() => {
-            // navigate to / open chat with user.id
+            // TODO: navigate to / open chat with user.id
           }}
         >
           <MessageCircleIcon width={18} height={18} color="#FF4D0D" />
@@ -150,7 +169,7 @@ export default function ProfileCard({ isOwnProfile, }: ProfileCardProps) {
         </View>
       </View>
 
-      {/* Own profile actions */}
+      {/* Own-profile actions — edit + post a new deal */}
       {isOwnProfile && (
         <View className="flex flex-col gap-3 my-4">
           <Link href="/profile/edit" asChild>
@@ -167,7 +186,7 @@ export default function ProfileCard({ isOwnProfile, }: ProfileCardProps) {
         </View>
       )}
 
-      {/* Post alerts - only for other users' profiles */}
+      {/* Post alerts — only on someone else's profile */}
       {!isOwnProfile && (
         <View className="bg-[#FFF6F2] border border-[#F7D9CC] shadow-sm p-3 rounded-lg my-2 flex-row justify-between items-center">
           <View className="shrink">
@@ -176,14 +195,17 @@ export default function ProfileCard({ isOwnProfile, }: ProfileCardProps) {
               Get notified when {user.name.split(" ")[0]} posts.
             </Text>
           </View>
-          {/* AlertButton RN equivalent goes here, e.g. <AlertButton contributorId={user.id} /> */}
+          {/* TODO: <AlertButton contributorId={user.id} /> */}
         </View>
       )}
 
-      {/* ReportModal RN equivalent */}
+      {/* Report modal — opened via the OverflowMenu item above */}
       <Modal visible={isReportOpen} transparent animationType="slide">
-        {/* Port your ReportModal here — pass targetType="user", targetId={user.id}, etc. */}
-        <Pressable className="flex-1 bg-black/40" onPress={() => setIsReportOpen(false)} />
+        {/* TODO: port ReportModal content here — pass targetType="user", targetId={user.id} */}
+        <Pressable
+          className="flex-1 bg-black/40"
+          onPress={() => setIsReportOpen(false)}
+        />
       </Modal>
     </SafeAreaView>
   );
