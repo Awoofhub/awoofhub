@@ -7,10 +7,17 @@ async function createOffer(payload: CreateOfferData): Promise<ApiResponse<Offer>
   return res;
 }
 
-async function offers(search: string, category: string, minRating: number, createdFrom: string, createdTo: string, page: number, limit: number): Promise<ApiResponse<Offer[]>> {
-  const res: ApiResponse<Offer[]> = await apiClient.get('/offers/', {
-    params: { search, category, minRating, createdFrom, createdTo, page, limit },
-  })
+async function offers(search: string, category: string, dealType: string, minRating: number, createdFrom: string, createdTo: string, location: string, page: number, limit: number): Promise<ApiResponse<Offer[]>> {
+  const params: Record<string, any> = { page, limit };
+  if (search) params.search = search;
+  if (category) params.category = category;
+  if (minRating) params.minRating = minRating;
+  if (createdFrom) params.createdFrom = createdFrom;
+  if (createdTo) params.createdTo = createdTo;
+  if (dealType) params.dealType = dealType;
+  if (location) params.location = location;
+
+  const res: ApiResponse<Offer[]> = await apiClient.get('/offers/', { params })
 
   return res;
 }

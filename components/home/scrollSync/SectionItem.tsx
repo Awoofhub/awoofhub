@@ -17,9 +17,11 @@ function SectionItem({ item, onLayout, index }: Props) {
     const { data, isLoading, isFetched, isFetching } = useOffers({
         search: "",
         category: item.slug ?? "",
+        dealType: "",
         minRating: 0,
         createdFrom: "",
         createdTo: "",
+        location: "",
         limit: 4
     });
 
