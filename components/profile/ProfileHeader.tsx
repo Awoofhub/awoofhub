@@ -12,6 +12,9 @@ interface Props {
 
 export default function ProfileHeader({ isOwnProfile, profile, }: Props) {
 
+    if (!profile) {
+        return null;
+    }
 
     return (
         <View className="w-full mx-auto p-4">
