@@ -6,6 +6,8 @@ import { View, Text } from "react-native";
 import ProfileCard from "@/components/profile/ProfileCard";
 import ProfileDeals from "@/components/profile/ProfileDeals";
 import Header from "@/components/header/Header";
+import { ScrollView } from "react-native-gesture-handler";
+
 
 interface ProfileScreenProps {
   params: {
@@ -35,11 +37,12 @@ export default function ProfileScreen({ params }: ProfileScreenProps) {
 
 
   return (
-    <View className="flex-1 justify-center">
-      <View className="flex-1 flex-col items-start">
-        <ProfileCard isOwnProfile={isOwnProfile} profile={user} />
-        
-      </View>
-    </View>
+    <ScrollView
+    className="flex-1"
+    contentContainerClassName="flex-col gap-1 items-start"
+  >
+    <ProfileCard isOwnProfile={isOwnProfile} profile={user} />
+    <ProfileDeals isOwnProfile={isOwnProfile} profile={user} />
+  </ScrollView>
   );
 }
