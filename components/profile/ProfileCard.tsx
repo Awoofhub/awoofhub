@@ -21,32 +21,20 @@ import { capitalizeFirstLetter } from "@/utils/truncate";
 
 interface ProfileCardProps {
   isOwnProfile: boolean;
-  // Optional: the parent screen may already have this from a list/nav param,
-  // so we can render instantly instead of waiting on a fresh fetch.
   profile?: UserType;
 }
 
 export default function ProfileCard({ isOwnProfile, profile }: ProfileCardProps) {
   const { username: rawUsername } = useLocalSearchParams();
-  // useLocalSearchParams can return string | string[] depending on route config —
-  // normalize to a single string.
+  
   const username = Array.isArray(rawUsername) ? rawUsername[0] : rawUsername;
-
-  const { data: currentUser } = useUser();
-
-  // profile (if passed in) seeds the query as initialData so the card paints
-  // immediately; the hook then revalidates in the background and becomes the
-  // real source of truth once it resolves.
   const { data: user, isLoading: isUserLoading } = useUserByUsername({
     username,
   });
 
-  // Only the report modal's open state lives here — the dropdown's open/close
-  // state is now owned internally by OverflowMenu, not this component.
   const [isReportOpen, setIsReportOpen] = useState(false);
 
-  // Config-driven menu items — see OverflowMenu for why this shape is reusable
-  // across any card (offers, comments, etc), not just profiles.
+
   const profileMenuItems: MenuItem[] = [
     {
       key: "report",
@@ -68,9 +56,7 @@ export default function ProfileCard({ isOwnProfile, profile }: ProfileCardProps)
   }
 
   return (
-    <SafeAreaView className="flex-1 w-full bg-white rounded-2xl px-4 py-8 shadow-sm border border-gray-100">
-      {/* Report menu — top right, only visible on someone else's profile.
-          You can't report yourself. */}
+    <SafeAreaView className="flex-1 w-full bg-white rounded-2xl px-4 py-3 shadow-sm border border-gray-100">
       {!isOwnProfile && (
         <View className="absolute top-4 right-4">
           <OverflowMenu
@@ -94,8 +80,6 @@ export default function ProfileCard({ isOwnProfile, profile }: ProfileCardProps)
               resizeMode="cover"
             />
           ) : (
-            // Fallback: colored circle with the user's first initial when
-            // there's no profile image yet.
             <View className="bg-[#F7C8D5] flex-1 items-center justify-center">
               <Text className="text-[#B85B80] text-3xl font-semibold">
                 {capitalizeFirstLetter(user.name)}
@@ -144,12 +128,11 @@ export default function ProfileCard({ isOwnProfile, profile }: ProfileCardProps)
         </CommonText>
       </View>
 
-      {/* Message button — only on someone else's profile */}
       {!isOwnProfile && (
         <TouchableOpacity
           className="w-full mt-2 mb-6 flex-row items-center justify-center gap-1 border border-primary rounded-md py-2.5"
           onPress={() => {
-            // TODO: navigate to / open chat with user.id
+      
           }}
         >
           <MessageCircleIcon width={18} height={18} color="#FF4D0D" />
@@ -169,7 +152,7 @@ export default function ProfileCard({ isOwnProfile, profile }: ProfileCardProps)
         </View>
       </View>
 
-      {/* Own-profile actions — edit + post a new deal */}
+
       {isOwnProfile && (
         <View className="flex flex-col gap-3 my-4">
           <Link href="/profile/edit" asChild>
@@ -186,7 +169,6 @@ export default function ProfileCard({ isOwnProfile, profile }: ProfileCardProps)
         </View>
       )}
 
-      {/* Post alerts — only on someone else's profile */}
       {!isOwnProfile && (
         <View className="bg-[#FFF6F2] border border-[#F7D9CC] shadow-sm p-3 rounded-lg my-2 flex-row justify-between items-center">
           <View className="shrink">

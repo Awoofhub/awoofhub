@@ -13,7 +13,7 @@ export default function MainLayout() {
         <Stack>
           <Stack.Screen name="offers" options={{ headerShown: false }} />
           <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-          <Stack.Screen name="profile" options={{ headerShown: false }} />
+          <Stack.Screen name="profile" options={{ headerShown: true, headerTitle: "", headerBackTitle: "Back" }} />
         </Stack>
       </SearchProvider>
     </Protected>

@@ -49,6 +49,7 @@ export default function Header({ isHome = true }: HeaderProps) {
                         isOverlay
                         isOpen={isSearchOpen}
                         onClose={closeSearch} />
+                        
                 </>
             )}
         </View>

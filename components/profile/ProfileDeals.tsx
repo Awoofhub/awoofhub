@@ -6,7 +6,7 @@ import { User } from "@/types/user";
 import { Link } from "expo-router";
 import { Tag } from "lucide-react-native";
 import { useMemo } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 interface Props {
   isOwnProfile: boolean;
@@ -38,8 +38,8 @@ export default function ProfileDeals({ isOwnProfile, profile }: Props) {
   );
 
   return (
-    <View className="flex-1">
-      <CommonText type="headerBold" className="text-2xl text-black mb-4">
+    <View className="flex-1 w-full items-center justify-center bg-white py-4 px-4">
+      <CommonText type="headerBold" className="text-2xl text-primary mb-4">
         Active Deals are here
       </CommonText>
 
@@ -47,27 +47,20 @@ export default function ProfileDeals({ isOwnProfile, profile }: Props) {
 
       {!isLoading && isFetched && offers.length === 0 && (
         <View className="flex-1 items-center justify-center py-16 px-4">
-          <Tag width={40} height={40} color="#000" />
-          <Text className="font-bold text-black mb-1 text-lg mt-4">
-            No deals yet
-          </Text>
-          <Text className="text-black text-sm mb-4 text-center">
-            {isOwnProfile
-              ? "Deals you post as an awoofer will appear here."
-              : "This user has no live offers at the moment."}
-          </Text>
-          {isOwnProfile && (
-            <Link href="/offers/create" asChild>
-              <TouchableOpacity className="bg-primary px-6 py-2 rounded-md">
-                <CommonText
-                  type="headerBold"
-                  className="text-white text-base font-semibold"
-                >
-                  Post an Awoof
-                </CommonText>
-              </TouchableOpacity>
-            </Link>
-          )}
+          <View className="items-center">
+            <Tag width={40} height={40}  color="#FF4D0D" />
+            <CommonText
+              type="paragraph"
+              className="text-black mb-1 text-lg mt-4"
+            >
+              No deals yet
+            </CommonText>
+            <CommonText type="paragraph" className="text-black text-sm mb-4 text-center">
+              {isOwnProfile
+                ? "Deals you post as an awoofer will appear here."
+                : "This user has no live offers at the moment."}
+            </CommonText>
+          </View>
         </View>
       )}
 
