@@ -24,7 +24,7 @@ export default function OfferCard({ offer }: Props) {
     <Link href={`/offers/${offer.id}`} asChild>
       <TouchableOpacity
         activeOpacity={0.9}
-        className="flex-1 max-w-[50%] bg-white rounded-xl border border-gray-100 p-2"
+        className="flex-1 max-w-[50%] min-h-[230px] bg-white rounded-xl border border-gray-100 p-2"
       >
         <View className="relative items-center justify-center h-28 mb-3">
           {(variant === "trending" ||

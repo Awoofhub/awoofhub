@@ -1,6 +1,8 @@
+import Text from "@/components/common/Text";
 import { colors } from '@/styles/colors';
 import { Offer } from '@/types/offer';
-import { ActivityIndicator, FlatList, Text, View } from 'react-native';
+import { ReactElement } from 'react';
+import { ActivityIndicator, FlatList, View } from 'react-native';
 import OfferCard from './OfferCard';
 import OfferListSkeleton from './OfferListSkeleton';
 
@@ -13,9 +15,11 @@ interface Props {
     isLoading: boolean;
     hasNextPage: boolean;
     fetchNextPage: () => void;
+    header?: ReactElement;
+    emptyComponent?: ReactElement;
 }
 
-export default function OfferInfiniteList({ offers, hasNextPage, isLoading, isFetched, isFetching, fetchNextPage, isFetchingNextPage }: Props) {
+export default function OfferInfiniteList({ offers, hasNextPage, isLoading, isFetched, isFetching, fetchNextPage, isFetchingNextPage, header, emptyComponent }: Props) {
 
     const listData = isLoading ? Array.from({ length: 8 }, (_, i) => ({ id: `skeleton-${i}` } as Offer)) : offers;
 
@@ -24,6 +28,9 @@ export default function OfferInfiniteList({ offers, hasNextPage, isLoading, isFe
             columnWrapperClassName="gap-3"
             contentContainerClassName="gap-3 px-3"
             data={listData}
+            ListHeaderComponent={
+                header ? () => header : undefined
+            }
             numColumns={2}
             renderItem={({ item }) => {
                 if (isLoading) {
@@ -52,7 +59,7 @@ export default function OfferInfiniteList({ offers, hasNextPage, isLoading, isFe
 
             ListEmptyComponent={() => {
                 if (!isFetching && isFetched && offers.length === 0) {
-                    return (
+                    return emptyComponent ?? (
                         <View className="pt-5">
                             <Text className="text-gray-500 text-center">
                                 No offers available.

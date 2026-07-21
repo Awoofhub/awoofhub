@@ -8,6 +8,7 @@ const text = tv({
       header: 'font-baloo-medium',
       headerBold: 'font-baloo-bold',
       paragraph: 'font-mont',
+      paragraphSemiBold: 'font-mont-semibold',
       paragraphBold: 'font-mont-bold',
       paragraphExtrabold: 'font-mont-extrabold',
       paragraphItalic: 'font-mont-italic'

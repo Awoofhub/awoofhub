@@ -1,7 +1,6 @@
-import { View, TouchableOpacity, Image } from "react-native";
-import { useRouter } from "expo-router";
 import Text from "@/components/common/Text";
-import {ArrowRightIcon, Mail } from "lucide-react-native";
+import { useRouter } from "expo-router";
+import { Image, View } from "react-native";
 
 export default function EmailSuccess() {
   const router = useRouter();

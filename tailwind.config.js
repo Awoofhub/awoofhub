@@ -19,6 +19,7 @@ module.exports = {
         'mont': ['Montserrat-Regular'],
         'mont-italic': ['Montserrat-Italic'],
         'mont-bold': ['Montserrat-Bold'],
+        'mont-semibold': ['Montserrat-SemiBold'],
         'mont-extrabold': ['Montserrat-ExtraBold'],
         'baloo-bold': ['Baloo2-Bold'],
         'baloo-medium': ['Baloo2-Medium'],

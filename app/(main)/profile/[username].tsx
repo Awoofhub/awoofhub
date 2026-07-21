@@ -1,12 +1,9 @@
 import Loading from "@/components/loading/Loading";
-import { useUserByUsername } from "@/features/user/useUserByUsername";
-import { useUser } from "@/features/user/useUser";
-import { useLocalSearchParams } from "expo-router";
-import { View, Text } from "react-native";
-import ProfileCard from "@/components/profile/ProfileCard";
 import ProfileDeals from "@/components/profile/ProfileDeals";
-import Header from "@/components/header/Header";
-import { ScrollView } from "react-native-gesture-handler";
+import { useUser } from "@/features/user/useUser";
+import { useUserByUsername } from "@/features/user/useUserByUsername";
+import { useLocalSearchParams } from "expo-router";
+import { Text, View } from "react-native";
 
 
 interface ProfileScreenProps {
@@ -37,12 +34,6 @@ export default function ProfileScreen({ params }: ProfileScreenProps) {
 
 
   return (
-    <ScrollView
-    className="flex-1"
-    contentContainerClassName="flex-col gap-1 items-start"
-  >
-    <ProfileCard isOwnProfile={isOwnProfile} profile={user} />
-    <ProfileDeals isOwnProfile={isOwnProfile} profile={user} />
-  </ScrollView>
+      <ProfileDeals isOwnProfile={isOwnProfile} profile={user} />
   );
 }

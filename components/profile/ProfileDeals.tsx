@@ -1,12 +1,11 @@
-import OfferInfiniteList from "@/components/offers/OfferInfiniteList";
-import CommonText from "@/components/common/Text";
-import ProfileDealsSkeleton from "@/components/profile/ProfileDealsSkeleton";
+import Text from "@/components/common/Text";
 import { useOffersByUsername } from "@/features/offers/useOffersByUsername";
 import { User } from "@/types/user";
-import { Link } from "expo-router";
 import { Tag } from "lucide-react-native";
 import { useMemo } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { View } from "react-native";
+import OfferInfiniteList from "../offers/OfferInfiniteList";
+import ProfileCard from "./ProfileCard";
 
 interface Props {
   isOwnProfile: boolean;
@@ -14,15 +13,7 @@ interface Props {
 }
 
 export default function ProfileDeals({ isOwnProfile, profile }: Props) {
-  const {
-    data,
-    isLoading,
-    isFetching,
-    isFetched,
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  } = useOffersByUsername({
+  const { data, isLoading, isFetching, isFetched, hasNextPage, isFetchingNextPage, fetchNextPage } = useOffersByUsername({
     username: profile?.username ?? "",
     search: "",
     category: "",
@@ -37,44 +28,52 @@ export default function ProfileDeals({ isOwnProfile, profile }: Props) {
     [data],
   );
 
+  const header = (
+    <>
+      <View className="px-1 pt-6">
+        <ProfileCard
+          profile={profile}
+          isOwnProfile={isOwnProfile}
+        />
+
+        <Text
+          type="headerBold"
+          className="text-2xl text-black mt-7"
+        >
+          Active Deals
+        </Text>
+      </View>
+    </>
+  );
+
   return (
-    <View className="flex-1 w-full items-center justify-center bg-white py-4 px-4">
-      <CommonText type="headerBold" className="text-2xl text-primary mb-4">
-        Active Deals are here
-      </CommonText>
-
-      {isLoading && <ProfileDealsSkeleton />}
-
-      {!isLoading && isFetched && offers.length === 0 && (
+    <OfferInfiniteList
+      offers={offers}
+      header={header}
+      hasNextPage={hasNextPage}
+      isLoading={false}
+      isFetching={isFetching}
+      isFetched={isFetched}
+      fetchNextPage={fetchNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      emptyComponent={
         <View className="flex-1 items-center justify-center py-16 px-4">
           <View className="items-center">
-            <Tag width={40} height={40}  color="#FF4D0D" />
-            <CommonText
+            <Tag width={40} height={40} color="#FF4D0D" />
+            <Text
               type="paragraph"
               className="text-black mb-1 text-lg mt-4"
             >
               No deals yet
-            </CommonText>
-            <CommonText type="paragraph" className="text-black text-sm mb-4 text-center">
+            </Text>
+            <Text type="paragraph" className="text-black text-sm mb-4 text-center">
               {isOwnProfile
                 ? "Deals you post as an awoofer will appear here."
                 : "This user has no live offers at the moment."}
-            </CommonText>
+            </Text>
           </View>
         </View>
-      )}
-
-      {!isLoading && offers.length > 0 && (
-        <OfferInfiniteList
-          offers={offers}
-          hasNextPage={hasNextPage}
-          isLoading={false}
-          isFetching={isFetching}
-          isFetched={isFetched}
-          fetchNextPage={fetchNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-        />
-      )}
-    </View>
-  );
+      }
+    />
+  )
 }

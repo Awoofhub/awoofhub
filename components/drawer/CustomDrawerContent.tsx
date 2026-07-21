@@ -37,20 +37,20 @@ export default function CustomDrawerContent() {
                     }}
                     className="bg-white"
                 >
-                    <View className="items-center my-7">
+                    <View className="items-center mt-5 mb-3">
                         {user.profileImageUrl ? (
                             <Image
                                 source={{ uri: user.profileImageUrl }}
-                                className="w-100 h-100 rounded-full"
+                                className="w-[100px] h-[100px] rounded-full"
                             />
                         ) : (
-                            <View className="w-100 h-100 bg-gray-300 justify-center items-center rounded-full">
-                                <FontAwesome name="user" size={24} color="gray" />
+                            <View className="w-[100px] h-[100px] bg-gray-300 justify-center items-center rounded-full">
+                                <FontAwesome name="user" size={40} color="gray" />
                             </View>
                         )}
                     </View>
 
-                    <Text type="headerBold" className="px-6 py-4 text-lg">{user.name}</Text>
+                    <Text type="headerBold" className="pt-2 pb-4 text-xl text-center">{user.name}</Text>
 
                     <View>
                         {[
