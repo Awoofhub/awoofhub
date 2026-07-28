@@ -22,3 +22,4 @@ export const useUserByUsername = ({username}: GetUserOptions) => {
     return { data, isLoading };
 };
 
+

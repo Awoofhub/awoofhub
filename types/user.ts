@@ -17,11 +17,13 @@ export interface User {
 
 export interface UpdateUserData {
   name?: string;
+  username?: string;
   profileImageUrl?: string;
   bio?: string;
   address?: string;
   website?: string;
-};
+}
+
 
 export interface UsernameCheckResult {
   available: boolean;

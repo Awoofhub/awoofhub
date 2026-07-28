@@ -5,7 +5,7 @@ export default function ProfileLayout() {
   return (
       <Stack>
         <Stack.Screen name="[username]" options={{ headerShown: false }} />
-        <Stack.Screen name="edit" options={{ headerTitle: "Edit" }} />
+        <Stack.Screen name="edit" options={{ headerShown:false }} />
       </Stack>
   );
 }
