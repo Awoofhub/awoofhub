@@ -3,7 +3,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { format } from "date-fns";
 import { Link, useLocalSearchParams } from "expo-router";
-import Loading from "../loading/Loading";
 import CommonText from "../common/Text";
 import {
   EllipseIcon,
@@ -16,6 +15,7 @@ import {
 import { User as UserType } from "@/types/user";
 import OverflowMenu, { MenuItem } from "@/components/menu/DropDownMenu";
 import { capitalizeFirstLetter } from "@/utils/truncate";
+import EditProfileModal from "../modal/EditProfileModal";
 
 interface ProfileCardProps {
   isOwnProfile: boolean;
@@ -28,6 +28,7 @@ export default function ProfileCard({ isOwnProfile, profile }: ProfileCardProps)
   const username = Array.isArray(rawUsername) ? rawUsername[0] : rawUsername;
 
   const [isReportOpen, setIsReportOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false)
 
 
   const profileMenuItems: MenuItem[] = [
@@ -150,11 +151,10 @@ export default function ProfileCard({ isOwnProfile, profile }: ProfileCardProps)
 
       {isOwnProfile && (
         <View className="flex flex-col gap-3 my-4">
-          <Link href="/profile/edit" asChild>
-            <TouchableOpacity className="w-full items-center border border-primary rounded-md py-3">
+            <TouchableOpacity className="w-full items-center border border-primary rounded-md py-3" onPress={() => setIsEditOpen(true)}>
               <Text className="text-primary text-base font-semibold">Edit Profile</Text>
             </TouchableOpacity>
-          </Link>
+          
           <Link href="/offers/create" asChild>
             <TouchableOpacity className="w-full flex-row items-center justify-center gap-1 bg-primary rounded-md py-3">
               <PlusIcon width={18} height={18} color="#fff" />
@@ -177,13 +177,10 @@ export default function ProfileCard({ isOwnProfile, profile }: ProfileCardProps)
       )}
 
       {/* Report modal — opened via the OverflowMenu item above */}
-      <Modal visible={isReportOpen} transparent animationType="slide">
-        {/* TODO: port ReportModal content here — pass targetType="user", targetId={user.id} */}
-        <Pressable
-          className="flex-1 bg-black/40"
-          onPress={() => setIsReportOpen(false)}
-        />
-      </Modal>
+      <EditProfileModal
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+      />
     </SafeAreaView>
   );
 }

@@ -14,6 +14,7 @@ import { Camera, LoaderCircle } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import { TomTomAutocomplete } from "../form/AutoComplete";
 import UsernameChecker from "../form/UsernameChecker";
+import CommonText from "../common/Text";
 
 export const EditProfileForm = ({ onSuccess }: EditProfileFormProps) => {
   const { data: currentUser } = useUser();
@@ -194,12 +195,14 @@ export const EditProfileForm = ({ onSuccess }: EditProfileFormProps) => {
           <TouchableOpacity
             onPress={handleSubmit(onSubmit)}
             disabled={updateUser.isPending || !isDirty}
-            className={`font-baloo rounded-md py-3 w-full max-w-[400px] items-center justify-center flex-row gap-2 ${
+            className={`rounded-md py-3 w-full items-center justify-center  gap-2 ${
               !isDirty ? "bg-[#FFD5C3]" : "bg-primary"
             }`}
           >
             {updateUser.isPending && <ActivityIndicator size="small" color="#fff" />}
-            <Text className="text-white font-baloo">Save Changes</Text>
+            <CommonText type="paragraphBold" className="text-white items-center justify-center ">
+              Save
+            </CommonText>
           </TouchableOpacity>
         </View>
       </View>
