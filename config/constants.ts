@@ -3,6 +3,7 @@ export const STREAM_API_KEY = process.env.EXPO_PUBLIC_STREAM_API_KEY as string;
 export const GOOGLE_WEB_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_ID as string;
 export const GOOGLE_IOS_ID = process.env.EXPO_PUBLIC_GOOGLE_IOS_ID as string;
 export const GOOGLE_ANDROID_ID = process.env.EXPO_PUBLIC_GOOGLE_ANDROID_ID as string;
+export const TOMTOM_API_KEY = process.env.EXPO_PUBLIC_TOMTOM_API_KEY as string
 
 export const ACTIVITIES_PER_PAGE = 6;
 

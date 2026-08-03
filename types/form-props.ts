@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export type SignupFormProps = {
     onSuccess: () => void;
 };
@@ -10,7 +12,7 @@ export type LoginFormProps = {
 
 
 export type EditProfileFormProps = {
-    onSuccess: () => void;
+    onSuccess: (user:User) => void;
 };
 
 
