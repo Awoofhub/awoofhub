@@ -52,7 +52,7 @@ export default function ProfileCard({ isOwnProfile, profile }: Props) {
                     setIsDropdownOpen(false);
                   }}
                 >
-                  <Text className="text-center font-medium text-red-500">
+                  <Text type="paragraphSemiBold" className="text-center text-red-500">
                     Report User
                   </Text>
                 </TouchableOpacity>

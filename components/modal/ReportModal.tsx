@@ -1,8 +1,9 @@
+import Text from "@/components/common/Text";
 import { useReport } from "@/features/report/useReport";
 import { Ionicons } from "@expo/vector-icons";
 import { ChevronDown } from "lucide-react-native";
 import { useState } from "react";
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, View, } from "react-native";
+import { Image, ScrollView, TextInput, TouchableOpacity, View, } from "react-native";
 import { Modal, Portal } from "react-native-paper";
 import ReportConfirmationModal from "./ReportConfirmationModal";
 
@@ -95,14 +96,10 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId, }: 
                         </View>
 
                         <View className="flex-1">
-                            <Text className="text-2xl font-semibold text-black">
+                            <Text type="headerBold" className="text-2xl text-black">
                                 {targetType === "offer"
                                     ? "Report this Deal"
                                     : "Report this Account"}
-                            </Text>
-
-                            <Text className="mt-1 text-sm text-gray-500">
-                                Your reports remain anonymous.
                             </Text>
                         </View>
                     </View>
@@ -111,7 +108,7 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId, }: 
 
                     {/* Reason */}
                     <View className="relative">
-                        <Text className="mb-2 text-base font-medium text-gray-600">
+                        <Text type="paragraphSemiBold" className="mb-2 text-base text-gray-600">
                             Reason for this report
                         </Text>
 
@@ -143,7 +140,7 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId, }: 
 
                         {/* Dropdown */}
                         {isDropdownOpen && (
-                            <View className="absolute left-0 right-0 top-16 z-50 rounded-xl border border-gray-200 bg-white">
+                            <View className="absolute left-0 right-0 top-8 z-50 rounded-xl border border-gray-200 bg-white">
                                 <ScrollView
                                     className="max-h-64"
                                     showsVerticalScrollIndicator={
@@ -185,7 +182,7 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId, }: 
 
                     {/* Description */}
                     <View className="mt-5">
-                        <Text className="mb-2 text-base font-medium text-gray-600">
+                        <Text type="paragraphSemiBold" className="mb-2 text-base text-gray-600">
                             Give more details
                         </Text>
 
@@ -206,7 +203,7 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId, }: 
                             className="rounded-xl border border-primary px-6 py-4"
                             onPress={handleClose}
                         >
-                            <Text className="font-medium text-primary">
+                            <Text type="paragraphSemiBold" className="text-primary">
                                 Discard
                             </Text>
                         </TouchableOpacity>
@@ -216,7 +213,7 @@ export default function ReportModal({ isOpen, onClose, targetType, targetId, }: 
                             className="rounded-xl bg-primary px-6 py-4"
                             onPress={handleSubmit}
                         >
-                            <Text className="font-medium text-white">
+                            <Text type="paragraphSemiBold" className="text-white">
                                 {isPending
                                     ? "Submitting..."
                                     : "Submit"}
